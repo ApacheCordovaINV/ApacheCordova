@@ -1,6 +1,5 @@
 name: CI - Pruebas Automáticas
 
-# Ejecutar en cada push y pull request
 on:
   push:
     branches: [ main, master, develop ]
@@ -13,103 +12,63 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    # 1. Checkout del código
-    - name: 📥 Checkout código
-      uses: actions/checkout@v3
+    - name: Checkout código
+      uses: actions/checkout@v4
     
-    # 2. Configurar Node.js
-    - name: 🟢 Configurar Node.js
-      uses: actions/setup-node@v3
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
     
-    # 3. Instalar dependencias
-    - name: 📦 Instalar dependencias
+    - name: Instalar dependencias
       run: npm ci
     
-    # 4. Ejecutar las pruebas
-    - name: 🧪 Ejecutar pruebas unitarias
+    - name: Ejecutar pruebas
       run: npm test
     
-    # 5. Generar reporte de cobertura
-    - name: 📊 Generar reporte de cobertura
+    - name: Generar cobertura
       run: npm test -- --coverage
     
-    # 6. Subir reporte de cobertura como artefacto
-    - name: 📤 Subir reporte de cobertura
-      uses: actions/upload-artifact@v3
-      if: always()
+    - name: Subir reporte de cobertura
+      uses: actions/upload-artifact@v4
+      if: success()
       with:
         name: coverage-report
         path: coverage/
-        retention-days: 30
-    
-    # 7. Comentar resultados en PR (opcional)
-    - name: 💬 Comentar resultados en PR
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          const coverage = 'coverage/index.html';
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: '✅ **Las pruebas han pasado correctamente!**\n\nPuedes descargar el reporte de cobertura desde los artefactos del workflow.'
-          })
+        retention-days: 7
 
   build:
     name: Build Cordova
     runs-on: ubuntu-latest
-    needs: test # Solo ejecutar si las pruebas pasan
+    needs: test
+    if: success()
     
     steps:
-    - name: 📥 Checkout código
-      uses: actions/checkout@v3
+    - name: Checkout código
+      uses: actions/checkout@v4
     
-    - name: 🟢 Configurar Node.js
-      uses: actions/setup-node@v3
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
     
-    - name: 📦 Instalar dependencias
+    - name: Instalar dependencias
       run: |
         npm ci
         npm install -g cordova
     
-    - name: 🔧 Agregar plataforma browser
-      run: cordova platform add browser
+    - name: Agregar plataforma browser
+      run: cordova platform add browser --save
     
-    - name: 🏗️ Build para browser
+    - name: Build
       run: cordova build browser
     
-    - name: 📤 Subir build como artefacto
-      uses: actions/upload-artifact@v3
+    - name: Subir build
+      uses: actions/upload-artifact@v4
+      if: success()
       with:
-        name: cordova-browser-build
+        name: cordova-build
         path: platforms/browser/www/
-        retention-days: 30
-
-  # Job para múltiples versiones de Node (opcional)
-  test-matrix:
-    name: Pruebas en Node ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Usar Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - run: npm ci
-    - run: npm test
+        retention-days: 7
