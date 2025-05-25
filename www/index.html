@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <div class="container">
+    <h1>User Management</h1>
+
+    <form id="userForm">
+      <input type="hidden" id="userId">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Name" required />
+      </div>
+      <div class="form-group">
+        <label for="idNumber">ID Number:</label>
+        <input type="text" id="idNumber" placeholder="ID Number" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Email" required />
+      </div>
+      <button type="submit" id="submitButton">Create User</button>
+      <button type="button" id="cancelEditButton" class="hidden">Cancel Edit</button>
+    </form>
+
+    <h2>Registered Users</h2>
+    <div id="loadingMessage" class="loading">Loading users...</div>
+    <ul id="userList"></ul>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
