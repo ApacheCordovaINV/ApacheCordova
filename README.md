@@ -18,11 +18,6 @@ Clona el siguiente repositorio:
 ```bash
 git clone https://github.com/ApacheCordovaINV/ApacheCordova.git
 ```
->[!NOTE]
->Para tener acceso al backend, dirígete al siguiente enlace y sigue los pasos de instalación:
-```bash
-https://github.com/ApacheCordovaINV/Basic_API
-```
 
 # Configuración
 ## Instalar dependencias globales
