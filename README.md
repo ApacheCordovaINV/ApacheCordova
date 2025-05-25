@@ -1,7 +1,7 @@
 # APACHE CORDOVA - Proyecto de investigación
-Proyecto de investigación para el curso de diseño y programación de aplicaciones móviles.
+Proyecto de investigación para el curso de Diseño y Programación de Aplicaciones Móviles.
 
-## Indice
+## Índice
 1. [Integrantes](#integrantes)
 2. [Instalación](#instalación)
 3. [Configuración](#configuración) 
@@ -18,16 +18,16 @@ Clona el siguiente repositorio:
 ```bash
 git clone https://github.com/ApacheCordovaINV/ApacheCordova.git
 ```
-> [!NOTE]
->Para tener acceso al **Backend** dirigase al siguiente enlace y sigue los pasos de instalación:
+>[!NOTE]
+>Para tener acceso al backend, dirígete al siguiente enlace y sigue los pasos de instalación:
 ```bash
 https://github.com/ApacheCordovaINV/Basic_API
 ```
 
 # Configuración
 ## Instalar dependecias globales
-Una vez clonado el repositorio se debe verificar que tenemos instalado **Node.js**.
-Para eso podemos usar los siguientes comandos:
+Una vez clonado el repositorio, se debe verificar que tenemos instalado **Node.js**.
+Para eso, podemos usar los siguientes comandos:
 ```bash
 node -v
 npm -v
@@ -37,7 +37,7 @@ npm -v
 ```bash
 https://nodejs.org/en
 ```
-Ya con acceso a **Node.js** instalamos apache cordova globalmente
+Ya con acceso a **Node.js** instalamos apache cordova globalmente:
 ```bash
 npm install -g cordova
 ```
@@ -63,7 +63,7 @@ cordova prepare
 
 
 ## Uso
-Una vez configurado el proyecto se puede ejecutar con el siguiente comando
+Una vez configurado el proyecto se puede ejecutar con el siguiente comando:
 
 ### Android
 ```bash
