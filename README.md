@@ -25,7 +25,7 @@ https://github.com/ApacheCordovaINV/Basic_API
 ```
 
 # Configuración
-## Instalar dependecias globales
+## Instalar dependencias globales
 Una vez clonado el repositorio, se debe verificar que tenemos instalado **Node.js**.
 Para eso, podemos usar los siguientes comandos:
 ```bash
