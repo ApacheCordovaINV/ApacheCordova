@@ -1,0 +1,68 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  test-and-build:
+    name: Pruebas y Build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v3
+    
+    - name: 🟢 Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: 📦 Instalar dependencias
+      run: |
+        npm ci
+        npm install -g cordova
+    
+    - name: 🧪 Ejecutar pruebas
+      run: npm test
+    
+    - name: 📊 Generar reporte de cobertura
+      run: npm test -- --coverage
+    
+    - name: 📱 Preparar plataformas Cordova
+      run: |
+        cordova platform add browser
+        cordova platform add android || true
+    
+    - name: 🔨 Build Cordova
+      run: |
+        cordova build browser
+        cordova build android || true
+    
+    - name: 📤 Subir artefactos
+      uses: actions/upload-artifact@v3
+      if: success()
+      with:
+        name: build-artifacts
+        path: |
+          platforms/browser/www/
+          platforms/android/app/build/outputs/apk/
+    
+    # Comentar en el PR con los resultados
+    - name: 💬 Comentar resultados en PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ Las pruebas han pasado correctamente!'
+          })

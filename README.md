@@ -77,3 +77,18 @@ cordova run android
 ```bash
 cordova run browser
 ```
+
+
+
+# Apache Cordova CRUD App
+
+![CI - Pruebas Automáticas](https://github.com/TU_USUARIO/TU_REPO/workflows/CI%20-%20Pruebas%20Automáticas/badge.svg)
+
+## Descripción
+
+## Cómo ejecutar las pruebas
+
+### Localmente
+```bash
+npm install
+npm test
