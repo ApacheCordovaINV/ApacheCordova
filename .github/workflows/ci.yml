@@ -1,0 +1,74 @@
+name: CI - Pruebas Automáticas
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Ejecutar Pruebas
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Instalar dependencias
+      run: npm ci
+    
+    - name: Ejecutar pruebas
+      run: npm test
+    
+    - name: Generar cobertura
+      run: npm test -- --coverage
+    
+    - name: Subir reporte de cobertura
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: coverage-report
+        path: coverage/
+        retention-days: 7
+
+  build:
+    name: Build Cordova
+    runs-on: ubuntu-latest
+    needs: test
+    if: success()
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+    
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Instalar dependencias
+      run: |
+        npm ci
+        npm install -g cordova
+    
+    - name: Agregar plataforma browser
+      run: cordova platform add browser --save
+    
+    - name: Build
+      run: cordova build browser
+    
+    - name: Subir build
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: cordova-build
+        path: platforms/browser/www/
+        retention-days: 7

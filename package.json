@@ -5,7 +5,8 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start test/karma.conf.js",
+    "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -15,7 +16,13 @@
   "devDependencies": {
     "cordova-android": "^14.0.1",
     "cordova-browser": "^7.0.0",
-    "cordova-plugin-device": "^3.0.0"
+    "cordova-plugin-device": "^3.0.0",
+    "jasmine": "^4.6.0",
+    "jasmine-core": "^5.7.1",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-jasmine": "^5.1.0"
   },
   "cordova": {
     "plugins": {

@@ -1,134 +1,203 @@
-// Constants for DOM elements
-const userForm = document.getElementById('userForm');
-const userIdInput = document.getElementById('userId');
-const nameInput = document.getElementById('name');
-const idInput = document.getElementById('idNumber');
-const emailInput = document.getElementById('email');
-const submitButton = document.getElementById('submitButton');
-const cancelEditButton = document.getElementById('cancelEditButton');
-const userList = document.getElementById('userList');
-const loadingMessage = document.getElementById('loadingMessage');
 
-let currentEditUserId = null; // Variable to store the ID of the user being edited
+(function() {
+    'use strict';
 
-// Local array to hold users
-let users = [];
+    // Constants for DOM elements
+    const userForm = document.getElementById('userForm');
+    const userIdInput = document.getElementById('userId');
+    const nameInput = document.getElementById('name');
+    const idInput = document.getElementById('idNumber');
+    const emailInput = document.getElementById('email');
+    const submitButton = document.getElementById('submitButton');
+    const cancelEditButton = document.getElementById('cancelEditButton');
+    const userList = document.getElementById('userList');
+    const loadingMessage = document.getElementById('loadingMessage');
 
-// Initially display empty list
-displayUsers(users);
+    let currentEditUserId = null; 
 
-// Function to show/hide the loading message (no real loading now)
-function toggleLoading(show) {
-    loadingMessage.classList.toggle('hidden', !show);
-    userList.classList.toggle('hidden', show); // Hide the list while loading
-}
 
-// Function to display users in the list
-function displayUsers(users) {
-    loadingMessage.classList.add('hidden');
-    userList.classList.remove('hidden');
-    userList.innerHTML = ''; // Clear the existing list
-    if (users.length === 0) {
-        userList.innerHTML = '<li>No registered users.</li>';
-        return;
-    }
+    let users = [];
 
-    users.forEach(user => {
-        const listItem = document.createElement('li');
-        listItem.dataset.id = user.id;
 
-        listItem.innerHTML = `
-            <div class="user-info">
-                <strong>${user.name}</strong>
-                <span>ID: ${user.idNumber}</span>
-                <span>Email: ${user.email}</span>
-            </div>
-            <div class="user-actions">
-                <button class="edit-button">Edit</button>
-                <button class="delete-button">Delete</button>
-            </div>
-        `;
-
-        // Edit button event
-        const editButton = listItem.querySelector('.edit-button');
-        editButton.addEventListener('click', () => editUser(user));
-
-        // Delete button event
-        const deleteButton = listItem.querySelector('.delete-button');
-        deleteButton.addEventListener('click', () => deleteUser(user.id));
-
-        userList.appendChild(listItem);
-    });
-}
-
-// Form submit event (Create/Save Changes)
-userForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent default form submission
-
-    const userData = {
-        id: currentEditUserId || generateUniqueId(),
-        name: nameInput.value,
-        idNumber: idInput.value,
-        email: emailInput.value
-    };
-
-    if (currentEditUserId) { // Edit mode
-        // Find index and update user
-        const index = users.findIndex(u => u.id === currentEditUserId);
-        if (index !== -1) {
-            users[index] = userData;
-            alert('User successfully updated.');
-        } else {
-            alert('User to edit not found.');
+    function toggleLoading(show) {
+        if (loadingMessage && userList) {
+            loadingMessage.classList.toggle('hidden', !show);
+            userList.classList.toggle('hidden', show); 
         }
-    } else { // Create mode
-        users.push(userData);
-        alert('User successfully created.');
     }
 
-    userForm.reset(); // Clear the form
-    resetFormForCreation(); // Reset form to create mode
-    displayUsers(users); // Refresh the user list
-});
 
-// Function to generate a unique ID (simple incremental or timestamp)
-function generateUniqueId() {
-    return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-}
+    function displayUsers(users) {
+        if (!userList || !loadingMessage) return; 
 
-// Function to load a user's data into the form for editing
-function editUser(user) {
-    currentEditUserId = user.id;
-    userIdInput.value = user.id;
-    nameInput.value = user.name;
-    idInput.value = user.idNumber;
-    emailInput.value = user.email;
+        loadingMessage.classList.add('hidden');
+        userList.classList.remove('hidden');
+        userList.innerHTML = ''; 
+        if (users.length === 0) {
+            userList.innerHTML = '<li>No registered users.</li>';
+            return;
+        }
 
-    submitButton.textContent = 'Save Changes';
-    cancelEditButton.classList.remove('hidden'); // Show cancel button
-}
+        users.forEach(user => {
+            const listItem = document.createElement('li');
+            listItem.dataset.id = user.id;
 
-// Cancel edit button event
-cancelEditButton.addEventListener('click', () => {
-    resetFormForCreation();
-});
+            listItem.innerHTML = `
+                <div class="user-info">
+                    <strong>${user.name}</strong>
+                    <span>ID: ${user.idNumber}</span>
+                    <span>Email: ${user.email}</span>
+                </div>
+                <div class="user-actions">
+                    <button class="edit-button">Edit</button>
+                    <button class="delete-button">Delete</button>
+                </div>
+            `;
 
-// Function to reset form to create mode
-function resetFormForCreation() {
-    currentEditUserId = null;
-    userForm.reset();
-    userIdInput.value = '';
-    submitButton.textContent = 'Create User';
-    cancelEditButton.classList.add('hidden'); // Hide cancel button
-}
+  
+            const editButton = listItem.querySelector('.edit-button');
+            editButton.addEventListener('click', () => editUser(user));
 
-// Function to delete a user
-function deleteUser(id) {
-    if (!confirm('Are you sure you want to delete this user?')) {
-        return;
+     
+            const deleteButton = listItem.querySelector('.delete-button');
+            deleteButton.addEventListener('click', () => deleteUser(user.id));
+
+            userList.appendChild(listItem);
+        });
     }
-    // Remove user from array
-    users = users.filter(u => u.id !== id);
-    alert('User successfully deleted.');
-    displayUsers(users); // Refresh list
-}
+
+
+    function generateUniqueId() {
+        return 'id-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    }
+
+
+    function editUser(user) {
+        if (!userIdInput || !nameInput || !idInput || !emailInput || !submitButton || !cancelEditButton) return;
+        
+        currentEditUserId = user.id;
+        userIdInput.value = user.id;
+        nameInput.value = user.name;
+        idInput.value = user.idNumber;
+        emailInput.value = user.email;
+
+        submitButton.textContent = 'Save Changes';
+        cancelEditButton.classList.remove('hidden');
+    }
+
+
+    function resetFormForCreation() {
+        currentEditUserId = null;
+        if (userForm) userForm.reset();
+        if (userIdInput) userIdInput.value = '';
+        if (submitButton) submitButton.textContent = 'Create User';
+        if (cancelEditButton) cancelEditButton.classList.add('hidden'); 
+    }
+
+
+    function deleteUser(id) {
+        if (!confirm('Are you sure you want to delete this user?')) {
+            return;
+        }
+ 
+        users = users.filter(u => u.id !== id);
+        alert('User successfully deleted.');
+        displayUsers(users); 
+    }
+
+    function createItem(item) {
+        const items = getAllItems();
+        item.id = item.id || Date.now();
+        items.push(item);
+        localStorage.setItem('items', JSON.stringify(items));
+        return item;
+    }
+
+
+    function getAllItems() {
+        const items = localStorage.getItem('items');
+        return items ? JSON.parse(items) : [];
+    }
+
+    function getItemById(id) {
+        const items = getAllItems();
+        return items.find(item => item.id === parseInt(id));
+    }
+
+    function updateItem(id, updates) {
+        const items = getAllItems();
+        const index = items.findIndex(item => item.id === parseInt(id));
+        
+        if (index !== -1) {
+            items[index] = { ...items[index], ...updates };
+            localStorage.setItem('items', JSON.stringify(items));
+            return items[index];
+        }
+        return null;
+    }
+
+    function deleteItem(id) {
+        const items = getAllItems();
+        const filteredItems = items.filter(item => item.id !== parseInt(id));
+        
+        if (filteredItems.length < items.length) {
+            localStorage.setItem('items', JSON.stringify(filteredItems));
+            return true;
+        }
+        return false;
+    }
+
+
+    if (typeof window !== 'undefined') {
+        window.createItem = createItem;
+        window.getAllItems = getAllItems;
+        window.getItemById = getItemById;
+        window.updateItem = updateItem;
+        window.deleteItem = deleteItem;
+    }
+
+    if (typeof document !== 'undefined') {
+
+        if (userList) {
+            displayUsers(users);
+        }
+
+
+        if (userForm) {
+            userForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const userData = {
+                    id: currentEditUserId || generateUniqueId(),
+                    name: nameInput.value,
+                    idNumber: idInput.value,
+                    email: emailInput.value
+                };
+
+                if (currentEditUserId) { 
+                    
+                    const index = users.findIndex(u => u.id === currentEditUserId);
+                    if (index !== -1) {
+                        users[index] = userData;
+                        alert('User successfully updated.');
+                    } else {
+                        alert('User to edit not found.');
+                    }
+                } else { 
+                    users.push(userData);
+                    alert('User successfully created.');
+                }
+
+                userForm.reset(); 
+                resetFormForCreation();
+                displayUsers(users); 
+            });
+        }
+
+        if (cancelEditButton) {
+            cancelEditButton.addEventListener('click', () => {
+                resetFormForCreation();
+            });
+        }
+    }
+})();
