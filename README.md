@@ -55,12 +55,20 @@ Instala los plugins y agrega los archivos a cada plataforma
 ```bash
 cordova prepare
 ```
-
+## Debemos remover el plugin de whitelist de android studio
+Remover el prlugin
+```bash
+cordova plugin rm cordova-plugin-whitelist
+```
 
 ## Uso
 Una vez configurado el proyecto se puede ejecutar con el siguiente comando:
 
 ### Android
+```bash
+cordova build android
+```
+
 ```bash
 cordova run android
 ```

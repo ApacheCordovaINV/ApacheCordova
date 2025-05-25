@@ -15,17 +15,18 @@
   "devDependencies": {
     "cordova-android": "^14.0.1",
     "cordova-browser": "^7.0.0",
-    "cordova-plugin-device": "^3.0.0",
-    "cordova-plugin-whitelist": "^1.3.5"
+    "cordova-plugin-device": "^3.0.0"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-device": {},
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-device": {}
     },
     "platforms": [
       "browser",
       "android"
     ]
+  },
+  "dependencies": {
+    "io.cordova.hellocordova": "file:"
   }
 }
