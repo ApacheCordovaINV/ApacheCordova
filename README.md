@@ -66,6 +66,12 @@ https://developer.android.com/studio?hl=es-419
 
 ## Descargar Gradle
 https://gradle.org/releases/
+
+## Pasar Gradle a el Dico local C
+Copiar la carpeta comprimida y pegarla en el Disco local C y descomprimirla
+
+## Entrar a la carpeta Graddle y luego a la carpeta bin y copiar la ruta
+
 ## Configurar las variables de entorno
 En variables de entorno del sistema agregar una nueva variable:
 1. JAVA_HOME
