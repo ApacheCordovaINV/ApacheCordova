@@ -138,3 +138,7 @@ cordova run browser
 ```bash
 npm install
 npm test
+
+
+## Link del video
+https://youtu.be/u7YoHVaHr0U
